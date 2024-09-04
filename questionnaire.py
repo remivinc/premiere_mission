@@ -19,6 +19,8 @@
 #    - lancer()
 #
 
+
+import json
 class Question:
     def __init__(self, titre, choix, bonne_reponse):
         self.titre = titre
@@ -88,12 +90,31 @@ lancer_questionnaire(questionnaire)"""
 # q = Question.FromData(data)
 # print(q.__dict__)
 
+#Questionnaire(
+#    (
+#    Question("Quelle est la capitale de la France ?", ("Marseille", "Nice", "Paris", "Nantes", "Lille"), "Paris"), 
+question_init = Question("Quelle est la capitale de l'Italie ?", ("Rome", "Venise", "Pise", "Florence"), "Rome"),
+#    Question("Quelle est la capitale de la Belgique ?", ("Anvers", "Bruxelles", "Bruges", "Liège"), "Bruxelles")
+#    )
+
+with open("animaux_leschats_confirme.json", "r") as f:
+    data = json.load(f)
+    questions = data.get("questions")
+    
+    questions_mises_en_forme = []
+    
+    for i in questions:
+        q = i.get("titre")
+        choix = i.get("choix")
+        choix_mis_en_forme = [k[0] for k in choix]
+
+        for j in choix:
+            if j[1]:
+                reponse = j[0]
+                
+        questions_mises_en_forme.append(Question(q, choix_mis_en_forme, reponse))
+    
+        
 Questionnaire(
-    (
-    Question("Quelle est la capitale de la France ?", ("Marseille", "Nice", "Paris", "Nantes", "Lille"), "Paris"), 
-    Question("Quelle est la capitale de l'Italie ?", ("Rome", "Venise", "Pise", "Florence"), "Rome"),
-    Question("Quelle est la capitale de la Belgique ?", ("Anvers", "Bruxelles", "Bruges", "Liège"), "Bruxelles")
-    )
+    questions_mises_en_forme
 ).lancer()
-
-
