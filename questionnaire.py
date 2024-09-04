@@ -14,8 +14,8 @@ class Question:
         q = Question(data["titre"], choix, bonne_reponse[0])
         return q
 
-    def poser(self):
-        print("QUESTION")
+    def poser(self, numero_question, nbr_questions):
+        print(f"QUESTION n°{numero_question + 1}/{nbr_questions}")
         print("  " + self.titre)
         for i in range(len(self.choix)):
             print("  ", i+1, "-", self.choix[i])
@@ -45,6 +45,7 @@ class Question:
         return Question.demander_reponse_numerique_utlisateur(min, max)
     
 class Questionnaire:
+
     def __init__(self, questions, categorie, titre, difficulte):
         self.questions = questions
         self.categorie = categorie
@@ -58,16 +59,18 @@ class Questionnaire:
 
     def lancer(self):
         score = 0
-        
+        nbr_questions = len(self.questions)
+
         print("-------")
         print("Questionnaire : " + self.titre)
         print("Catégorie : " + self.categorie)
         print("Difficulté : " + self.difficulte)
-        print("Nombre de question :", len(self.questions))
+        print("Nombre de question :", nbr_questions)
         print("-------")
         
-        for question in self.questions:
-            if question.poser():
+        for numero_question in range(nbr_questions):
+            question = self.questions[numero_question]
+            if question.poser(numero_question, nbr_questions):
                 score += 1
         print("Score final :", score, "sur", len(self.questions))
         return score
