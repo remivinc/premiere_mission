@@ -59,10 +59,14 @@ class Questionnaire:
         return Questionnaire(questions, data["categorie"], data["titre"], data["difficulte"])
     
     def from_json_file(filename):
-        f =  open(filename, "r")
-        data = json.load(f)
-        f.close()
-        return Questionnaire.from_json_data(data).lancer()
+        try:
+            f =  open(filename, "r")
+            data = json.load(f)
+            f.close()
+        except:
+            print("Exception lors de l'ouverture ou de la lecture du fichier")
+            return None
+        return Questionnaire.from_json_data(data)
 
     def lancer(self):
         score = 0
@@ -89,4 +93,7 @@ class Questionnaire:
 
 json_filename = sys.argv[1]
 
-Questionnaire.from_json_file(json_filename)
+questionnaire = Questionnaire.from_json_file(json_filename)
+
+if questionnaire != None:
+    questionnaire.lancer()
