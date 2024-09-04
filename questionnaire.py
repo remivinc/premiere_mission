@@ -1,35 +1,17 @@
-# PROJET QUESTIONNAIRE V3 : POO
-#
-# - Pratiquer sur la POO
-# - Travailler sur du code existant
-# - Mener un raisonnement
-#
-# -> Définir les entitées (données, actions)
-#
-# Question
-#    - titre       - str
-#    - choix       - (str)
-#    - bonne_reponse   - str
-#
-#    - poser()  -> bool
-#
-# Questionnaire
-#    - questions      - (Question)
-#
-#    - lancer()
-#
-
-
 import json
+
 class Question:
     def __init__(self, titre, choix, bonne_reponse):
         self.titre = titre
         self.choix = choix
         self.bonne_reponse = bonne_reponse
 
-    def FromData(data):
-        # ....
-        q = Question(data[2], data[0], data[1])
+    def FromJsonData(data):
+        choix = [i[0] for i in data["choix"]]
+        bonne_reponse = [i[0] for i in data["choix"] if i[1]]
+        if len(bonne_reponse) != 1:
+            return None
+        q = Question(data["titre"], choix, bonne_reponse[0])
         return q
 
     def poser(self):
@@ -93,28 +75,20 @@ lancer_questionnaire(questionnaire)"""
 #Questionnaire(
 #    (
 #    Question("Quelle est la capitale de la France ?", ("Marseille", "Nice", "Paris", "Nantes", "Lille"), "Paris"), 
-question_init = Question("Quelle est la capitale de l'Italie ?", ("Rome", "Venise", "Pise", "Florence"), "Rome"),
+#    Question("Quelle est la capitale de l'Italie ?", ("Rome", "Venise", "Pise", "Florence"), "Rome"),
 #    Question("Quelle est la capitale de la Belgique ?", ("Anvers", "Bruxelles", "Bruges", "Liège"), "Bruxelles")
 #    )
 
-with open("animaux_leschats_confirme.json", "r") as f:
-    data = json.load(f)
-    questions = data.get("questions")
-    
-    questions_mises_en_forme = []
-    
-    for i in questions:
-        q = i.get("titre")
-        choix = i.get("choix")
-        choix_mis_en_forme = [k[0] for k in choix]
+f =  open("cinema_alien_debutant.json", "r")
+data = json.load(f)
+f.close()
+questions = data["questions"]
 
-        for j in choix:
-            if j[1]:
-                reponse = j[0]
-                
-        questions_mises_en_forme.append(Question(q, choix_mis_en_forme, reponse))
-    
-        
+q = Question.FromJsonData(questions[0])
+q.poser()
+
+"""        
 Questionnaire(
     questions_mises_en_forme
 ).lancer()
+"""
