@@ -8,8 +8,11 @@ class Question:
         self.bonne_reponse = bonne_reponse
 
     def from_json_data(data):
+        #transforme les donnéees choix tuple (titre, bool 'bonne reponse') -> [choix1, choix2, ...]
         choix = [i[0] for i in data["choix"]]
+        #trouve le bon choix en fonction du bool 'bonne réponse'
         bonne_reponse = [i[0] for i in data["choix"] if i[1]]
+        #si aucune bonne reponse ou plusieurs obnnes réponses -> anomalies dans les données
         if len(bonne_reponse) != 1:
             return None
         q = Question(data["titre"], choix, bonne_reponse[0])
@@ -56,6 +59,8 @@ class Questionnaire:
     def from_json_data(data):
         questionnaire_data = data["questions"]
         questions = [Question.from_json_data(i) for i in questionnaire_data]
+        #suprrime les questions "none" sans recréer un objet
+        questions = [i for i in questions if i]
         return Questionnaire(questions, data["categorie"], data["titre"], data["difficulte"])
     
     def from_json_file(filename):
